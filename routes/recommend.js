@@ -36,66 +36,72 @@ router.get("/", async (ctx) => {
 
 // 获取banner
 function getBanner() {
-  const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
+  const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg';
+  const jumpPrefix = 'https://y.qq.com/n/yqq/album/';
+
+  const headers = {
+    referer: 'https://u.y.qq.com/',
+    host: 'u.y.qq.com'
+  };
 
   const params = Object.assign({}, commonParams, {
     platform: 'h5',
     uin: 0,
-    needNewCode: 1
+    needNewCode: 1,
+    platform: 'yqq.json',
+    hostUin: 0,
+    needNewCode: 0,
+    inCharset: 'utf8',
+    format: 'json',
+    '-': 'recom' + (Math.random() + '').replace('0.', ''),
+    data: {
+      'comm': { 'ct': 24 },
+      'category': { 'method': 'get_hot_category', 'param': { 'qq': '' }, 'module': 'music.web_category_svr' },
+      'recomPlaylist': {
+        'method': 'get_hot_recommend',
+        'param': { 'async': 1, 'cmd': 2 },
+        'module': 'playlist.HotRecommendServer'
+      },
+      'playlist': {
+        'method': 'get_playlist_by_category',
+        'param': { 'id': 8, 'curPage': 1, 'size': 40, 'order': 5, 'titleid': 8 },
+        'module': 'playlist.PlayListPlazaServer'
+      },
+      'new_song': { 'module': 'newsong.NewSongServer', 'method': 'get_new_song_info', 'param': { 'type': 5 } },
+      'new_album': {
+        'module': 'newalbum.NewAlbumServer',
+        'method': 'get_new_album_info',
+        'param': { 'area': 1, 'sin': 0, 'num': 10 }
+      },
+      'new_album_tag': { 'module': 'newalbum.NewAlbumServer', 'method': 'get_new_album_area', 'param': {} },
+      'toplist': { 'module': 'musicToplist.ToplistInfoServer', 'method': 'GetAll', 'param': {} },
+      'focus': { 'module': 'QQMusic.MusichallServer', 'method': 'GetFocus', 'param': {} }
+    }
   });
 
-  const data = {
-    slider: [{
-        linkUrl: "https://y.qq.com/m/digitalbum/v3/gold/index.html?mid=002N3gR01CnUiG&_video=true&g_f=shoujijiaodian",
-        picUrl: "http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/3154561.jpg",
-        id: 31677
-      },
-      {
-        linkUrl: "https://y.qq.com/m/digitalbum/v3/gold/index.html?openinqqmusic=1&_video=true&mid=002YD2Fk37JQUW&g_f=shoujijiaodian",
-        picUrl: "http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/3187188.jpg",
-        id: 32189
-      },
-      {
-        linkUrl: "https://y.qq.com/m/act/RHXHBJDL2020/index.html?openinqqmusic=1&channelId=10062701&ADTAG=neirong142",
-        picUrl: "http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/3187628.jpg",
-        id: 32233
-      },
-      {
-        linkUrl: "https://y.qq.com/m/act/SCXSD/index_v1.html?ADTAG=neirong_share511&openinqqmusic=1&channelId=10049223",
-        picUrl: "http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/3181017.jpg",
-        id: 32141
-      },
-      {
-        linkUrl: "https://y.qq.com/m/sact/sfhd/378.html?ADTAG=jdt&openinqqmusic=1",
-        picUrl: "http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/3171662.jpg",
-        id: 32119
-      }
-    ],
-    radioList: [{
-        picUrl: "http://y.gtimg.cn/music/photo/radio/track_radio_199_12_8.jpg",
-        Ftitle: "热歌",
-        radioid: 199
-      },
-      {
-        picUrl: "http://y.gtimg.cn/music/photo/radio/track_radio_307_12_5.jpg",
-        Ftitle: "一人一首招牌歌",
-        radioid: 307
-      }
-    ],
-    songList: []
-  };
-
-  // return new Promise((resolve, reject) => {
-  //   axios.get(url, { params }).then(({ data = {} }) => {
-  //     resolve(data.data);
-  //   }).catch((e) => {
-  //     console.log(e.message);
-  //     resolve(data);
-  //   });
-  // });
-
   return new Promise((resolve, reject) => {
-    resolve(data);
+    axios.get(url, { params, headers }).then(({ data = {} }) => {
+      if (data.code === 0) {
+        const slider = [];
+        const content = data.focus.data && data.focus.data.content;
+
+        for (let i = 0; i < content.length; i++) {
+          const item = content[i];
+          const sliderItem = {};
+          sliderItem.id = item.id;
+          sliderItem.linkUrl = jumpPrefix + item.jump_info.url + '.html';
+          sliderItem.picUrl = item.pic_info.url;
+          slider.push(sliderItem);
+        }
+
+        resolve({ slider });
+      } else {
+        reject(new Error(data.msg));
+      }
+    }).catch((e) => {
+      console.log(e.message);
+      reject(e);
+    });
   });
 }
 // banner数据
