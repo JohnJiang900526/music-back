@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2b14d2f2.chunk.css",
+    "main.js": "/static/js/main.fbdb93de.chunk.js",
+    "main.js.map": "/static/js/main.fbdb93de.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.e5112c82.js",
+    "runtime-main.js.map": "/static/js/runtime-main.e5112c82.js.map",
+    "static/css/2.6ee1232c.chunk.css": "/static/css/2.6ee1232c.chunk.css",
+    "static/js/2.63a01e15.chunk.js": "/static/js/2.63a01e15.chunk.js",
+    "static/js/2.63a01e15.chunk.js.map": "/static/js/2.63a01e15.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.bb459675165b7ff49733428bc4e1b30d.js": "/precache-manifest.bb459675165b7ff49733428bc4e1b30d.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.6ee1232c.chunk.css.map": "/static/css/2.6ee1232c.chunk.css.map",
+    "static/css/main.2b14d2f2.chunk.css.map": "/static/css/main.2b14d2f2.chunk.css.map",
+    "static/js/2.63a01e15.chunk.js.LICENSE.txt": "/static/js/2.63a01e15.chunk.js.LICENSE.txt",
+    "static/media/index.less": "/static/media/music-icon.8a348576.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e5112c82.js",
+    "static/css/2.6ee1232c.chunk.css",
+    "static/js/2.63a01e15.chunk.js",
+    "static/css/main.2b14d2f2.chunk.css",
+    "static/js/main.fbdb93de.chunk.js"
+  ]
+}

@@ -5,6 +5,7 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const connectHistory = require('connect-history-api-fallback');
 
 const users = require('./routes/users')
 const recommend = require('./routes/recommend')
@@ -15,6 +16,14 @@ const song = require('./routes/song')
 
 // error handler
 onerror(app)
+
+// 处理PWA页面的History路由模式
+app.use(async (ctx, next)=> {
+  const middleware = connectHistory();
+
+  middleware(ctx, null, () => {});
+  await next();
+});
 
 // middlewares
 app.use(bodyparser({
