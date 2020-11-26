@@ -1,11 +1,13 @@
 const Koa = require('koa')
-const app = new Koa()
+const path = require('path')
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const connectHistory = require('connect-history-api-fallback');
+const static = require('koa-static');
+const app = new Koa()
 
 const users = require('./routes/users')
 const recommend = require('./routes/recommend')
@@ -13,6 +15,12 @@ const singer = require('./routes/singer')
 const rank = require('./routes/rank')
 const search = require('./routes/search')
 const song = require('./routes/song')
+
+// 设置静态文件缓存
+const staticUrl = static(path.resolve(__dirname + '/public'), {
+  maxAge: 100000,
+  gzip: true
+});
 
 // error handler
 onerror(app)
@@ -31,7 +39,7 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
+app.use(staticUrl);
 
 app.use(views(__dirname + '/views', {
   extension: 'pug'

@@ -1,4 +1,5 @@
 const Router = require("koa-router");
+const multer = require('@koa/multer');
 const axios = require("axios");
 const { commonParams } = require("./config");
 
@@ -106,6 +107,22 @@ router.get("/musicList", async (ctx) => {
       msg: e.message,
       data: {}
     };
+  }
+});
+
+
+const upload = multer();
+
+// 测试上传数据
+router.post("/upload", upload.single('file'), async (ctx) => {
+  console.log('ctx.request.file', ctx.request.file);
+  console.log('ctx.file', ctx.file);
+  console.log('ctx.request.body', ctx.request.body);
+
+  ctx.body = {
+    code: 1,
+    msg: "",
+    data: {}
   }
 });
 
