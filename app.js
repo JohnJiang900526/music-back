@@ -15,6 +15,7 @@ const singer = require('./routes/singer')
 const rank = require('./routes/rank')
 const search = require('./routes/search')
 const song = require('./routes/song')
+const file = require('./routes/file')
 
 // 设置静态文件缓存
 const staticUrl = static(path.resolve(__dirname + '/public'), {
@@ -74,6 +75,8 @@ app.use(rank.routes(), rank.allowedMethods())
 app.use(search.routes(), search.allowedMethods());
 // 歌曲
 app.use(song.routes(), song.allowedMethods());
+// 测试
+app.use(file.routes(), file.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
