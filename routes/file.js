@@ -9,10 +9,10 @@ const router = new Router({
 
 router.get("/:name", async (ctx) => {
   const name = ctx.params.name;
-  const path = `public/static/upload/${name}`;
+  const url = `public/static/upload/${name}`;
 
-  ctx.attachment(path);
-  await send(ctx, path);
+  ctx.attachment(url);
+  await send(ctx, url);
 });
 
 module.exports = router;
